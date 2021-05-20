@@ -38,63 +38,87 @@ var each = function(collection, iterator) {
 };
 
 var reduce = function(collection, iterator, accumulator) {
-  // console.log('FUNCTION reduce');
   if (accumulator === undefined) {
     accumulator = collection[0];
     collection = collection.slice(1);
   }
   // each(collection[i], i, collection)
   each(collection, function(value, key) {
-        // console.log(`accumulator: ${accumulator}, value = ${value}`);
     accumulator = iterator(accumulator, value);
-        // console.log(`result (accumulator): ${accumulator}`);
-        // console.log();
+
   });
   return accumulator;
 }
 
-
+// determine whether all elements match a truth test using reduce
 var every = function(collection, iterator) {
-  // use reduce
-  var allElementsPass = true;
-  if (iterator === undefined && arguments.length === 1) {
-    each(collection, function(value) {
-      if (allElementsPass === true && value === true) {
-        allElementsPass = true;
-      } else {
-        allElementsPass = false;
-      }
-    });
-    return allElementsPass;
-  }
-  each(collection, function(value) {
-    if (iterator(value) === value && allElementsPass && value === true) {
-      allElementsPass = true;
-    } else if (iterator(value) === true && allElementsPass) {
-      allElementsPass = true;
-    } else {
-      allElementsPass = false;
+
+  var result = reduce(collection, function(accumulator, value) {
+    if (iterator(value)) {
+      return true;
     }
-  });
-
-  return allElementsPass;
+    return false;
+  }, true);
+  return result;
 }
 
-var testCases = [
-  [],
-  [true, {}, 1],
-  [null, 0, undefined],
-  [true, false, 1],
-  [1, undefined, true],
-  [undefined, undefined, undefined],
-  [1],
-  [0]
-];
+// var testcase = [true, {}, 1]; // true
+var testcase = [null, 0, undefined]; // false
 
-console.log();
-for (var i = 0; i < testCases.length; i++) {
-  var result = every(testCases[i], identity);
-  console.log(`${result}`);
-}
-console.log();
+var result = every(testcase, identity);
+console.log("result = " + result);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var every = function(collection, iterator) {
+//   // use reduce
+//   var allElementsPass = true;
+//   if (iterator === undefined && arguments.length === 1) {
+//     each(collection, function(value) {
+//       if (allElementsPass === true && value === true) {
+//         allElementsPass = true;
+//       } else {
+//         allElementsPass = false;
+//       }
+//     });
+//     return allElementsPass;
+//   }
+//   each(collection, function(value) {
+//     if (iterator(value) === value && allElementsPass && value === true) {
+//       allElementsPass = true;
+//     } else if (iterator(value) === true && allElementsPass) {
+//       allElementsPass = true;
+//     } else {
+//       allElementsPass = false;
+//     }
+//   });
+
+//   return allElementsPass;
+// }
+
+
 
